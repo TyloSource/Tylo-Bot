@@ -1519,4 +1519,4 @@ async def deleteemoji(ctx, Emoji: discord.Emoji):
 		await ctx.send(f'Successfully deleted (or not): {Emoji}')
 		await Emoji.delete()
 
-client.run('ODgyMzM5Mzk1NTAyNDg1NTQ1.YS58mA.F4tItPhkn90zO0Jei0m3DargrUQ')
+client.run('UR TOKEN!')
