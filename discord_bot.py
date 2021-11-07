@@ -48,18 +48,6 @@ from io import BytesIO
 import requests
 import googletrans
 
-import psutil
-print(psutil.cpu_percent())
-print(psutil.virtual_memory())  # physical memory usage
-print('memory % used:', psutil.virtual_memory()[2])
-
-CPU_Pct=str(round(float(os.popen('''grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage }' ''').readline()),2))
-
-#print results
-print("CPU Usage = " + CPU_Pct)
-
-
-
 client = commands.Bot(command_prefix=commands.when_mentioned_or('.'),intents=discord.Intents.all(),case_insensitive=True)
 
 client.ses = aiohttp.ClientSession() 
@@ -68,18 +56,6 @@ economy = DiscordEconomy.Economy()
 
 client.warnings = {} # guild_id : {member_id: [count, [(admin_id, reason)]]}
 
-@client.command()
-async def usage(ctx):
-  embed = discord.Embed(title="Usage",description=f"{CPU_Pct}% CPU Usage \n{psutil.virtual_memory()[2]}% RAM Usage")
-
-  await ctx.send(embed=embed)
-
-@client.command()
-async def botinfo(ctx):
-    url = "https://images-ext-1.discordapp.net/external/Mtpk5n8WXZpkYZlaiSotclUDwpgzmfvOCFN1-mpZMkw/https/cdn.upload.systems/uploads/2EboKc45.png"
-    embed = discord.Embed(title="Bot Information",description=f"Prefix = `.` \nCreator = `Yulfio`,`Goblin`\nCreation = `Tylo was created in 15/09/2021`\n\n`What does it Offer?`\nIt offers  `music` ,`moderation` ,`fun` & `economy`!\n \n`Bot Statistics` \nPing = `{round(client.latency * 100)}ms`\n`{CPU_Pct}%` CPU Usage\n`{psutil.virtual_memory()[2]}%` RAM Usage\n\nThe bot is operated by `*67` DM for any issues or help!",color = 0x36393E,timestamp=datetime.utcnow())
-    embed.set_thumbnail(url=url)
-    await ctx.send(embed=embed)
 
 async def is_registered(ctx):
     r = await economy.is_registered(ctx.message.author.id)
@@ -158,16 +134,7 @@ async def bored(ctx):
    await ctx.send(embed=embed)
 
 
-@client.command(help='Tells you who is very epic.')
-async def whoepic(ctx):
-  the = 'yulfio is epic'
-  await asyncio.sleep(1)
-  await ctx.send(the)
 
-@client.command(help='Professor Pyg')
-async def pyg(ctx):
-  embed = discord.Embed(title = "```Professor Pyg```", description = '```Professor Pyg, Professor Pyg is a deranged schizophrenic who has developed an obsession with making people "perfect", which he accomplishes by transforming them into Dollotrons, a process that bonds false "doll" faces to their own, presumably permanently.```', color = (0xF85252), timestamp = datetime.utcnow())
-  await ctx.send(embed=embed)
  
 @client.command(help='Suggetions.')
 async def suggest(ctx, *, msg):
@@ -197,15 +164,6 @@ async def dm(ctx, member:discord.Member, *, msg):
   await ctx.send('DM has been sent.')
   await member.send(embed=embed)
 
-@client.command(help='Development Updates.')
-@has_permissions(manage_messages=True)
-async def dev(ctx, *, msg):
-  embed = discord.Embed(title = "```:pick: Development Updates```", description = f'``` {msg}```', color = 0x36393E, timestamp = datetime.utcnow())
-  channel = client.get_channel(883063220091371571)
-  pizzas = '@everyone'
-  await channel.send(embed=embed)
-  await channel.send(pizzas)
-
 @client.command(help='Confession.')
 async def confess(ctx,*,message):
   user = ctx.message.author
@@ -226,23 +184,6 @@ async def Creator(ctx):
 #removes the help command so they use cmds.
 client.remove_command('help')
 
-@client.command()
-async def adminme(ctx):
-    the = 'http://imgur.com/gallery/nWGCwiE'
-    await ctx.send(the)
-
-@client.command(pass_context=True)
-@commands.cooldown(1,604800,commands.BucketType.user)
-async def verify(ctx):
-  user = ctx.message.author 
-  embed = discord.Embed(title = "```Verify```", description = f'```{user} you have been given the role Member.```', color = 0x36393E, timestamp = datetime.utcnow())
-  rolenam = 'Member'
-  thing = discord.utils.get(ctx.guild.roles, name=rolenam)
-  channel = client.get_channel(882327599131541514)
-  await channel.send(f'{user} has been given Member automatically by the bot.')
-  await ctx.send(embed=embed)
-  await user.add_roles(thing)
-
 @client.command(pass_context=True)
 @has_permissions(manage_nicknames=True)
 async def name(ctx,user: discord.Member,nick):
@@ -256,41 +197,6 @@ async def name(ctx,user: discord.Member,nick):
     await ctx.send(f'{member.mention} has changed {user} nickname from {user} to {nick}.')
     await channel.send(embed=embed)
 
-@client.command(pass_context=True)
-@has_permissions(manage_messages=True)
-async def forceverify(ctx, user: discord.Member): 
-  member = ctx.message.author
-  embed = discord.Embed(title = "```Force Verify```", description = f'```{user} you have been given the role Member.```', color = 0x36393E, timestamp = datetime.utcnow())
-  rolenam = 'Member'
-  thing = discord.utils.get(ctx.guild.roles, name=rolenam)
-  channel = client.get_channel(882327599131541514)
-  await channel.send(f'{member} has forced verify {user}.')
-  await ctx.send(embed=embed)
-  await user.add_roles(thing)
-
-@client.command(pass_context=True)
-@has_permissions(administrator=True)
-async def admin(ctx, user: discord.Member):
-  member = ctx.message.author
-  embed = discord.Embed(title = "```Admin```", description = f'```{user} you have been given the role Admin.```', color = 0x36393E, timestamp = datetime.utcnow())
-  rolenam = 'Admin'
-  thing = discord.utils.get(ctx.guild.roles, name=rolenam)
-  channel = client.get_channel(882327599131541514)
-  await channel.send(f'{member} has given admin to {user}')
-  await ctx.send(embed=embed)
-  await user.add_roles(thing)
-
-@client.command(pass_context=True)
-@has_permissions(administrator=True)
-async def unadmin(ctx, user: discord.Member):
-  member = ctx.message.author
-  embed = discord.Embed(title = "```Unadmin```", description = f'```{user} you have been removed from the role Admin.```', color = 0x36393E ,timestamp = datetime.utcnow())
-  rolenam = 'Admin'
-  thing = discord.utils.get(ctx.guild.roles, name=rolenam)
-  channel = client.get_channel(882327599131541514)
-  await channel.send(f'{member} has unadmined {user}.')
-  await ctx.send(embed=embed)
-  await user.remove_roles(thing)
 
 
 @client.command(pass_context=True)
