@@ -8,7 +8,7 @@ If any errors happen DM Loop#3089 on Discord, I am active from the time 3PM-9PM.
 
 Good luck have a great day!
 ----------------------------------------------------------------------------------------------------------------------
-The code will be updated quite regulary.
+The code is very shit, I am rewriting all the code as when I made it I was shit at Python.
 
 Cogs included:
 ----------------------------------------------------------------------------------------------------------------------
